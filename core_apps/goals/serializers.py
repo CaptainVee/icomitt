@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Goal
+from .models import Goal, GoalLog, Penalty
 
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +25,11 @@ class GoalSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Specific days goals require dates.")
 
         return data
+
+
+class GoalLogSerializer(serializers.ModelSerializer):
+    goal_title = serializers.CharField(source="goal.title", read_only=True)
+
+    class Meta:
+        model = GoalLog
+        fields = ["id", "goal", "goal_title", "date", "status", "penalty_applied"]

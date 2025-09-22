@@ -1,8 +1,8 @@
 from django.utils import timezone
 from rest_framework import permissions, status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .models import Goal
-from .serializers import GoalSerializer
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, RetrieveAPIView
+from .models import Goal, GoalLog
+from .serializers import GoalSerializer, GoalLogSerializer
 from core_apps.common.mixins import StandardResponseMixin
 
 
@@ -88,3 +88,42 @@ class GoalDetailView(StandardResponseMixin, RetrieveUpdateDestroyAPIView):
             )
         except Exception as e:
             return self.error_response(str(e), status.HTTP_404_NOT_FOUND)
+        
+
+
+class GoalLogListView(StandardResponseMixin, ListAPIView):
+    serializer_class = GoalLogSerializer
+
+    def get_queryset(self):
+        queryset = GoalLog.objects.all().order_by("-date")
+
+        # Optional: filter by goal_id query param
+        goal_id = self.request.query_params.get("goal_id")
+        if goal_id:
+            queryset = queryset.filter(goal_id=goal_id)
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return self.success_response(
+            data=serializer.data,
+            message="Goal logs retrieved successfully",
+            status_code=status.HTTP_200_OK,
+        )
+
+
+class GoalLogDetailView(StandardResponseMixin, RetrieveAPIView):
+    queryset = GoalLog.objects.all()
+    serializer_class = GoalLogSerializer
+    lookup_field = 'id'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return self.success_response(
+            data=serializer.data,
+            message="Goal log retrieved successfully",
+            status_code=status.HTTP_200_OK,
+        )

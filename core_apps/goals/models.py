@@ -26,9 +26,9 @@ class Goal(TimeStampedUUIDModel):
     time_of_day = models.TimeField(null=True, blank=True)
     duration_minutes = models.PositiveIntegerField(null=True, blank=True)
 
-    weekdays = models.CharField(models.CharField(max_length=9), null=True, blank=True)  # e.g. ["sunday","wednesday"]
+    weekdays = models.CharField(max_length=250, null=True, blank=True)  # e.g. ["sunday","wednesday"]
     # weekdays = ArrayField(models.CharField(max_length=9), null=True, blank=True)  # e.g. ["sunday","wednesday"]
-    specific_dates = models.CharField(models.DateField(), null=True, blank=True)  # e.g. ["2025-10-04", "2025-10-10"]
+    specific_dates = models.CharField(max_length=250, null=True, blank=True)  # e.g. ["2025-10-04", "2025-10-10"]
     # specific_dates = ArrayField(models.DateField(), null=True, blank=True)  # e.g. ["2025-10-04", "2025-10-10"]
     target_count = models.PositiveIntegerField(null=True, blank=True)  # e.g. 2 per week
 

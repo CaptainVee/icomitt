@@ -1,6 +1,8 @@
 from django.utils import timezone
-from goals.models import Goal, GoalLog, Penalty
-from goals.time_engine import GoalEvaluator
+from goals.models import Goal
+from core_apps.logs.models import GoalLog
+from core_apps.verifications.models import Penalty
+from core_apps.goals.service import GoalEvaluator
 
 def evaluate_goals():
     today = timezone.now().date()

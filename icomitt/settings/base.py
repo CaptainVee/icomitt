@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+import environ
 from pathlib import Path
 from datetime import timedelta
 import dj_database_url
@@ -19,6 +20,9 @@ import dj_database_url
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 BASE_DIR = Path(__file__).resolve().parent.parent
 APPS_DIR = ROOT_DIR / "core_apps"
+
+env = environ.Env()
+environ.Env.read_env(env.str('ENV_FILE', default='.envs/.local'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -61,6 +65,9 @@ LOCAL_APPS = [
     'core_apps.users.apps.UsersConfig',
     'core_apps.common.apps.CommonConfig',
     'core_apps.goals.apps.GoalsConfig',
+    'core_apps.wallets.apps.WalletsConfig',
+    'core_apps.verifications.apps.VerificationsConfig',
+    'core_apps.logs.apps.LogsConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -115,10 +122,12 @@ WSGI_APPLICATION = 'icomitt.wsgi.application'
 # }
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
-    )
+    "default": env.db("DATABASE_URL")
 }
+
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
+print("DATABASES", DATABASES)
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
@@ -254,3 +263,12 @@ LOGGING = {
         },
     },
 }
+
+
+PAYSTACK_BASE_URL = env("PAYSTACK_BASE_URL")
+PAYSTACK_SECRET_KEY = env("PAYSTACK_SECRET_KEY")
+
+ADMIN_USERNAME=env("ADMIN_USERNAME")
+ADMIN_EMAIL=env("ADMIN_EMAIL")
+ADMIN_PASSWORD=env("ADMIN_PASSWORD")
+

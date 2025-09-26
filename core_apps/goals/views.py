@@ -74,32 +74,10 @@ class GoalStep1BasicInfoView(BaseGoalCreationView):
         return self.error_response(serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
 
 
-class GoalStep2StakeInfoView(BaseGoalCreationView):
-    """Step 2: Capture stake amount and payment method"""
+class GoalStep2VerificationInfoView(BaseGoalCreationView):
+    """Step 2: Capture verification method and type"""
     step_number = 2
     required_previous_step = 1
-    
-    def post(self, request):
-        if not self.validate_previous_steps():
-            return self.error_response('Please complete step 1 first', status_code=status.HTTP_400_BAD_REQUEST)
-        
-        serializer = GoalStakeInfoSerializer(data=request.data)
-        if serializer.is_valid():
-            self.save_goal_data(serializer.validated_data)
-            return Response({
-                'success': True,
-                'message': 'Stake information saved successfully',
-                'data': serializer.validated_data,
-                'next_step': self.get_next_step(serializer.validated_data)
-            }, status=status.HTTP_200_OK)
-        
-        return self.error_response(serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
-
-
-class GoalStep3VerificationInfoView(BaseGoalCreationView):
-    """Step 3: Capture verification method and type"""
-    step_number = 3
-    required_previous_step = 2
     
     def post(self, request):
         if not self.validate_previous_steps():
@@ -124,10 +102,10 @@ class GoalStep3VerificationInfoView(BaseGoalCreationView):
         return 4  # Go to human verifier step
 
 
-class GoalStep4HumanVerifiersView(BaseGoalCreationView):
-    """Step 4: Add human verifiers"""
-    step_number = 4
-    required_previous_step = 3
+class GoalStep3HumanVerifiersView(BaseGoalCreationView):
+    """Step 3: Add human verifiers"""
+    step_number = 3
+    required_previous_step = 2
     
     def post(self, request):
         if not self.validate_previous_steps():
@@ -149,6 +127,27 @@ class GoalStep4HumanVerifiersView(BaseGoalCreationView):
         
         return self.error_response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class GoalStep4StakeInfoView(BaseGoalCreationView):
+    """Step 4: Capture stake amount and payment method"""
+    step_number = 4
+    required_previous_step = 3
+    
+    def post(self, request):
+        if not self.validate_previous_steps():
+            return self.error_response('Please complete step 1 first', status_code=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = GoalStakeInfoSerializer(data=request.data)
+        if serializer.is_valid():
+            self.save_goal_data(serializer.validated_data)
+            return Response({
+                'success': True,
+                'message': 'Stake information saved successfully',
+                'data': serializer.validated_data,
+                'next_step': self.get_next_step(serializer.validated_data)
+            }, status=status.HTTP_200_OK)
+        
+        return self.error_response(serializer.errors, status_code=status.HTTP_400_BAD_REQUEST)
 
 class GoalStep5SummaryView(BaseGoalCreationView):
     """Step 5: Show summary for confirmation"""

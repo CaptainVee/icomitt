@@ -6,11 +6,10 @@ from core_apps.common.models import TimeStampedUUIDModel
 
 
 class Goal(TimeStampedUUIDModel):
-    VERIFICATION_METHODS = [
+    SUBMISSION_METHODS = [
         ("text", "Text"),
         ("photo", "Photo"),
         ("video", "Video"),
-        ("friend", "Friend Verification"),
     ]
     
     VERIFICATION_TYPES = [
@@ -58,9 +57,9 @@ class Goal(TimeStampedUUIDModel):
     is_active = models.BooleanField(default=True)
     is_completed = models.BooleanField(default=False)
 
-    verification_method = models.CharField(
+    submission_method = models.CharField(
         max_length=20,
-        choices=VERIFICATION_METHODS,
+        choices=SUBMISSION_METHODS,
         default="text"
     )
     verification_type = models.CharField(

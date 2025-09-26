@@ -14,7 +14,6 @@ import os
 import environ
 from pathlib import Path
 from datetime import timedelta
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
@@ -67,6 +66,7 @@ LOCAL_APPS = [
     'core_apps.goals.apps.GoalsConfig',
     'core_apps.wallets.apps.WalletsConfig',
     'core_apps.verifications.apps.VerificationsConfig',
+    'core_apps.submissions.apps.SubmissionsConfig',
     'core_apps.logs.apps.LogsConfig',
 ]
 
@@ -127,7 +127,6 @@ DATABASES = {
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
-print("DATABASES", DATABASES)
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",

@@ -1,5 +1,7 @@
 from .models import HumanVerifier, Penalty
 from rest_framework import serializers
+from datetime import date
+from core_apps.goals.models import Goal
 
 
 class HumanVerifierSerializer(serializers.ModelSerializer):
@@ -7,20 +9,19 @@ class HumanVerifierSerializer(serializers.ModelSerializer):
         model = HumanVerifier
         fields = ['contact_type', 'contact_value', 'name']
         
-    def validate_contact_value(self):
-        contact_type = self.initial_data.get('contact_type')
-        contact_value = self.validated_data.get('contact_value')
-        
+    def validate(self, data):
+        contact_type = data.get("contact_type")
+        contact_value = data.get("contact_value")
+
         if contact_type == 'email':
-            # Basic email validation
             if '@' not in contact_value:
-                raise serializers.ValidationError("Invalid email format")
+                raise serializers.ValidationError({"contact_value": "Invalid email format"})
         elif contact_type == 'whatsapp':
-            # Basic phone number validation
-            if not contact_value.replace('+', '').replace('-', '').replace(' ', '').isdigit():
-                raise serializers.ValidationError("Invalid phone number format")
-        
-        return contact_value
+            normalized = contact_value.replace('+', '').replace('-', '').replace(' ', '')
+            if not normalized.isdigit():
+                raise serializers.ValidationError({"contact_value": "Invalid phone number format"})
+
+        return data
     
 
 class PenaltySerializer(serializers.ModelSerializer):

@@ -30,7 +30,8 @@ urlpatterns = [
     path('api/v1/auth/', include('core_apps.users.urls')),
     path('api/v1/goals/', include('core_apps.goals.urls')),
     path('api/v1/wallet/', include('core_apps.wallets.urls')),
-    # path('api/v1/verify/', include('core_apps.verifications.urls')),
+    # path('api/v1/verifications/', include('core_apps.verifications.urls')),
+    path('api/v1/submissions/', include('core_apps.submissions.urls')),
     path('api/v1/logs/', include('core_apps.logs.urls')),
 
 ]

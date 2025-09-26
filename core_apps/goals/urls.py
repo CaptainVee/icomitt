@@ -1,9 +1,9 @@
 from django.urls import path
 
 from .views import (
-    GoalDetailView, GoalListCreateView, GoalStep1BasicInfoView, GoalStep2StakeInfoView,
-    GoalCancelCreationView, GoalCreateFinalView, GoalStep5SummaryView, GoalStep4HumanVerifiersView,
-    GoalStep3VerificationInfoView)
+    GoalDetailView, GoalListCreateView, GoalStep1BasicInfoView, GoalStep4StakeInfoView,
+    GoalCancelCreationView, GoalCreateFinalView, GoalStep5SummaryView, GoalStep3HumanVerifiersView,
+    GoalStep2VerificationInfoView)
 
 app_name = 'users'
 
@@ -12,9 +12,9 @@ urlpatterns = [
     path('', GoalListCreateView.as_view(), name='goal-list'),
     path('<uuid:id>/', GoalDetailView.as_view(), name='goal-detail'),
     path('create/step1/', GoalStep1BasicInfoView.as_view(), name='goal_step1'),
-    path('create/step2/', GoalStep2StakeInfoView.as_view(), name='goal_step2'),
-    path('create/step3/', GoalStep3VerificationInfoView.as_view(), name='goal_step3'),
-    path('create/step4/', GoalStep4HumanVerifiersView.as_view(), name='goal_step4'),
+    path('create/step2/', GoalStep2VerificationInfoView.as_view(), name='goal_step3'),
+    path('create/step3/', GoalStep3HumanVerifiersView.as_view(), name='goal_step4'),
+    path('create/step4/', GoalStep4StakeInfoView.as_view(), name='goal_step2'),
     path('create/step5/', GoalStep5SummaryView.as_view(), name='goal_step5'),
     path('create/final/', GoalCreateFinalView.as_view(), name='goal_create_final'),
     path('create/cancel/', GoalCancelCreationView.as_view(), name='goal_cancel_creation'),
